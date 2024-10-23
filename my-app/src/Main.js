@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
 
-const EditForm = ({initialData}) =>{
-
-}
-
-const handleEdit = () =>{
-   
-}
 
 
-const AddUserForm = ({ onSubmit }) => {
+
+
+
+const AddUserForm = ({ onSubmit , formData}) => {
     return (
       <form className='border-2 border-red-500 rounded-lg'
         onSubmit={(e) => {
           e.preventDefault();
-          const formData = {
+          const formValues = {
             name: e.target.name.value,
             email: e.target.email.value,
             age: e.target.age.value,
@@ -23,33 +19,33 @@ const AddUserForm = ({ onSubmit }) => {
             password: e.target.password.value,
             action:e.target.action.value,
           };
-          onSubmit(formData); // Pass the data to the parent
+          onSubmit(formValues); // Pass the data to the parent
         }}
       >
        
         <div>
           <label htmlFor="name">Name:</label>
-          <input type="text" id="name" name="name" placeholder='Name' required />
+          <input type="text" id="name" name="name" placeholder='Name' defaultValue={formData.name} required />
         </div>
 
         <div>
           <label htmlFor="sirname">Sirname:</label>
-          <input type="text" id="sirname"  name="sirname" placeholder='Sirname' />
+          <input type="text" id="sirname"  name="sirname" placeholder='Sirname'defaultValue={formData.sirname} />
         </div>
 
         <div>
           <label htmlFor="age">Age:</label>
-          <input type="number" id="age" name="age" placeholder=' Age' required />
+          <input type="number" id="age" name="age" placeholder=' Age' defaultValue={formData.age} required />
         </div>
        
         <div>
           <label htmlFor="email">Email:</label>
-          <input type="email" id="email" name="email" placeholder=' Email' required />
+          <input type="email" id="email" name="email" placeholder=' Email' defaultValue={formData.email} required />
         </div>
 
         <div>
           <label htmlFor="password">PassWord:</label>
-          <input type="star" id="password" name="password" placeholder=' Password' required />
+          <input type="star" id="password" name="password" placeholder=' Password' defaultValue={formData.password} required />
         </div>
         
         <button type="submit">Submit</button>
@@ -60,37 +56,58 @@ const AddUserForm = ({ onSubmit }) => {
 const Main = () => {
     
        
-    const [userCount , setUserCount ] = useState(0);
 
     // function addUser() {
-        
-        
     // }
 
-    const [isFormVisible ,setIsFormVisible] = useState(false);
-    const [users,setUsers]   = useState([]);
-    
-   
+    const [isFormVisible, setIsFormVisible] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [editIndex, setEditIndex] = useState(null); 
+    const [formData, setFormData] = useState({
+      name: '',
+      sirname: '',
+      age: '',
+      email: '',
+      password: ''
+    });
 
+    const handleEdit = (i) =>{
+      setEditIndex(i); // 
+      setFormData(users[i]); // Pre-populate the form with the selected user's data
+      setIsFormVisible(true);
+   }
+    
     const handleAddUser = (formData) =>{
         setUsers([...users,formData]);
         setIsFormVisible(false);
-        setUserCount(userCount+1); 
     };
 
+    const handleAddOrUpdateUser = (formData) =>{
+      if(editIndex !==null){
+        const updateUsers=[...users];
+
+         updateUsers[editIndex]=formData;
+         setUsers(updateUsers);
+         setEditIndex(null);
+      }else {
+        setUsers([...users,formData]);
+      }
+      setFormData({ name: '', sirname: '', age: '', email: '', password: '' }); // Reset form data
+      setIsFormVisible(false);
+    }
+
     const handleDelete = (id) => {
-      debugger
+      
       const newList = users.filter((item, index)=>index !== id);
       console.log("newlist", newList);
-      
       setUsers(newList);
     };
 
-    console.log("users", users);
+   
     
 
   return (
-    <div className=' ' >
+    <div className='' >
 
       <div className='flex space-x-[600px]   w-full'>
         <span className=''>Count : {users.length}</span>
@@ -99,8 +116,9 @@ const Main = () => {
                     {isFormVisible ? "cancel" : "Add User"} </button>
      
       </div>
-      {isFormVisible && <AddUserForm onSubmit={handleAddUser}/>}
-
+      {isFormVisible && (
+        <AddUserForm onSubmit={handleAddOrUpdateUser} formData={formData} />
+      )}
       <div className='table mt-5 flex-row'>
       <table className="border-collapse border border-slate-400 ...">
       
@@ -125,9 +143,9 @@ const Main = () => {
             <td className='border border-slate-300'>{item.email}</td>
             <td className='border border-slate-300'>{item.password}</td>
             <td className='border border-slate-300'>
-            <button onClick={()=>{setIsFormVisible(!isFormVisible); handleEdit()}} 
-                className='border-2 border-grey-200 rounded-1 flex-end'>
-                    {isFormVisible ? "cancel" : "edit"} </button>
+            <button onClick={() => handleEdit(index)} className='btn border-2 border-grey-200 rounded-1'>
+                    Edit
+                  </button>
               <button onClick={()=>handleDelete(index)} className=''>Delete</button></td>
           </tr>
         ))}
