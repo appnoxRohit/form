@@ -1,9 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react';
+
+
+const EditForm = ({initialData}) =>{
+
+}
+
+const handleEdit = () =>{
+   
+}
 
 
 const AddUserForm = ({ onSubmit }) => {
     return (
-      <form className='border-2 border-black'
+      <form className='border-2 border-red-500 rounded-lg'
         onSubmit={(e) => {
           e.preventDefault();
           const formData = {
@@ -17,33 +26,33 @@ const AddUserForm = ({ onSubmit }) => {
           onSubmit(formData); // Pass the data to the parent
         }}
       >
-        
+       
         <div>
           <label htmlFor="name">Name:</label>
-          <input type="text" id="name" name="name" required />
+          <input type="text" id="name" name="name" placeholder='Name' required />
         </div>
 
         <div>
           <label htmlFor="sirname">Sirname:</label>
-          <input type="text" id="sirname" name="sirname" />
+          <input type="text" id="sirname"  name="sirname" placeholder='Sirname' />
         </div>
 
         <div>
           <label htmlFor="age">Age:</label>
-          <input type="number" id="age" name="age" required />
+          <input type="number" id="age" name="age" placeholder=' Age' required />
         </div>
        
         <div>
           <label htmlFor="email">Email:</label>
-          <input type="email" id="email" name="email" required />
+          <input type="email" id="email" name="email" placeholder=' Email' required />
         </div>
 
         <div>
           <label htmlFor="password">PassWord:</label>
-          <input type="star" id="password" name="password" required />
+          <input type="star" id="password" name="password" placeholder=' Password' required />
         </div>
         
-        <button type="submit">Add User</button>
+        <button type="submit">Submit</button>
       </form>
     );
   };
@@ -53,24 +62,38 @@ const Main = () => {
        
     const [userCount , setUserCount ] = useState(0);
 
-    function addUser() {
+    // function addUser() {
         
         
-    }
+    // }
+
     const [isFormVisible ,setIsFormVisible] = useState(false);
     const [users,setUsers]   = useState([]);
+    
+   
 
     const handleAddUser = (formData) =>{
         setUsers([...users,formData]);
         setIsFormVisible(false);
-        setUserCount(userCount+1);
-    }
+        setUserCount(userCount+1); 
+    };
+
+    const handleDelete = (id) => {
+      debugger
+      const newList = users.filter((item, index)=>index !== id);
+      console.log("newlist", newList);
+      
+      setUsers(newList);
+    };
+
+    console.log("users", users);
+    
 
   return (
     <div className=' ' >
 
       <div className='flex space-x-[600px]   w-full'>
-        <span className=''>Count : {userCount}</span>
+        <span className=''>Count : {users.length}</span>
         <button onClick={()=>setIsFormVisible(!isFormVisible)} 
                 className='border-2 border-grey-200 rounded-1 flex-end'>
                     {isFormVisible ? "cancel" : "Add User"} </button>
@@ -79,7 +102,7 @@ const Main = () => {
       {isFormVisible && <AddUserForm onSubmit={handleAddUser}/>}
 
       <div className='table mt-5 flex-row'>
-      <table class="border-collapse border border-slate-400 ...">
+      <table className="border-collapse border border-slate-400 ...">
       
       <thead>
         <tr>
@@ -94,14 +117,18 @@ const Main = () => {
         </tr>
       </thead>
       <tbody>
-        {users.map((item) => (
-          <tr key={item.id}>
+        {users.map((item, index) => (
+          <tr key={index}>
             <td className='border border-slate-300'>{item.name}</td>
             <td className='border border-slate-300'>{item.sirname}</td>
             <td className='border border-slate-300'>{item.age}</td>
             <td className='border border-slate-300'>{item.email}</td>
             <td className='border border-slate-300'>{item.password}</td>
-            <td className='border border-slate-300'>{item.Action}</td>
+            <td className='border border-slate-300'>
+            <button onClick={()=>{setIsFormVisible(!isFormVisible); handleEdit()}} 
+                className='border-2 border-grey-200 rounded-1 flex-end'>
+                    {isFormVisible ? "cancel" : "edit"} </button>
+              <button onClick={()=>handleDelete(index)} className=''>Delete</button></td>
           </tr>
         ))}
       </tbody>
