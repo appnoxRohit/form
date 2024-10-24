@@ -11,6 +11,7 @@ import Paper from '@mui/material/Paper';
 import { Modal } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -18,7 +19,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+    fontSize: 16,
   },
 }));
 
@@ -31,10 +32,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const AddUserForm = ({ onSubmit, formData }) => {
+const AddUserForm = ({ onSubmit, formData   }) => {
   return (
+    
     <form
-      className='rounded-lg'
+      className='rounded-lg  '
       onSubmit={(e) => {
         e.preventDefault();
         const formValues = {
@@ -47,13 +49,17 @@ const AddUserForm = ({ onSubmit, formData }) => {
         onSubmit(formValues); // Pass the data to the parent
       }}
     >
-      <div>
-        <label htmlFor="name">Name:</label>
-        <input
+      <div className='flex flex-wrap gap-4  '>
+
+      
+      <div className=''>
+        <label className='block pl-2 ' htmlFor="name">Name:</label>
+        <input 
           type="text"
           id="name"
           name="name"
           placeholder="Name"
+          className='border-2 border-grey-300 pl-2 rounded-md '
           defaultValue={formData.name}
           required
           minLength={3} // Minimum length for name
@@ -62,12 +68,13 @@ const AddUserForm = ({ onSubmit, formData }) => {
       </div>
 
       <div>
-        <label htmlFor="sirname">Sirname:</label>
+        <label className='pl-2' htmlFor="sirname">Sirname:</label>
         <input
           type="text"
           id="sirname"
           name="sirname"
           placeholder="Sirname"
+          className='border-2 border-grey-300 pl-2 rounded-md block'
           defaultValue={formData.sirname}
           minLength={3} // Minimum length for sirname
           maxLength={20}
@@ -75,48 +82,60 @@ const AddUserForm = ({ onSubmit, formData }) => {
       </div>
 
       <div>
-        <label htmlFor="age">Age:</label>
-        <input
+        <label className='pl-2' htmlFor="age">Age:</label>
+        <input 
           type="number"
           id="age"
           name="age"
           placeholder="Age"
+          className='border-2 border-grey-300 pl-2 rounded-md block'
           defaultValue={formData.age}
           required
-          min={18} // Minimum age should be 18
-          max={100} // Set max age if necessary
+          min={18} 
+          max={100} 
         />
       </div>
 
       <div>
-        <label htmlFor="email">Email:</label>
+        <label className='pl-2' htmlFor="email">Email:</label>
         <input
           type="email"
           id="email"
           name="email"
           placeholder="Email"
+          className='border-2 border-grey-300 pl-2 rounded-md block'
+
           defaultValue={formData.email}
           required
-          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" // Basic email pattern validation
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
         />
       </div>
 
       <div>
-        <label htmlFor="password">Password:</label>
+        <label className='pl-2' htmlFor="password">Password:</label>
         <input
           type="password"
           id="password"
           name="password"
           placeholder="Password"
+          className='border-2 border-grey-300 rounded-md pl-2 block'
           defaultValue={formData.password}
           required
           minLength={6} // Password should have a minimum of 6 characters
         />
       </div>
 
-      <Button variant="outlined" type="submit">
+      
+      </div>
+     
+     <div className=' flex mt-3 ml-[650px] '>
+      <Button className='w-7 h-10 mt-2 flex justify-end  ' variant="contained" type="submit">
         Submit
       </Button>
+      
+
+      </div>
+      
     </form>
   );
 };
@@ -142,6 +161,9 @@ const Main = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [confirm , setConfirm ] = useState(false);
+  const confirmationModalOpen = () => setConfirm(true);
+  const confirmationModalClose = ()=> setConfirm(false);
 
   const handleEdit = (i) => {
     setEditIndex(i);
@@ -175,61 +197,88 @@ const Main = () => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 600, // Increased width
-    height: 'auto', // Allow height to adjust based on content
+    width: 790, 
+    height: 'auto', 
     bgcolor: 'background.paper',
-    border: '2px solid #ccc', // Lighter border color
-    borderRadius: '12px', // Add rounded corners
-    boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', // Softer shadow effect
-    padding: '32px', // Larger padding
+    border: '2px solid #ccc', 
+    borderRadius: '12px',
+    boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', 
+    padding: '32px', 
   };
   
-
+  
   return (
-    <div className="w-screen">
-      <div>
-        <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
+    <div className="w-screen p-5">
+      <div className='flex   '>
+        <Modal className='border-2 border-red-700 ' open={open} onClose={handleClose}
+         aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+          <Box  sx={style}>
+            <Typography className='flex justify-between ' id="modal-modal-title" variant="h6" component="h2">
               {editIndex !== null ? 'Edit User' : 'Add User'}
+              <Button className='flex   ' onClick={()=>handleClose()}> <CancelIcon/> </Button>
+              
+              
+
+
             </Typography>
             <AddUserForm onSubmit={handleAddOrUpdateUser} formData={formData} />
           </Box>
         </Modal>
       </div>
 
-      <div className="flex space-x-[1200px] w-full">
-        <span className="pl-10 text-2xl">USER COUNT: {users.length}</span>
-        <Button
+      <div className="flex justify-between w-full">
+        <span className=" text-2xl"><strong>USER COUNT:</strong> {users.length}</span>
+          <Button 
           onClick={() => {
             setFormData({ name: '', sirname: '', age: '', email: '', password: '' });
+            
             setIsFormVisible(!isFormVisible);
             handleOpen();
           }}
           variant="contained"
         >
-          {isFormVisible ? 'Cancel' : 'Add User'}
+          {/* {isFormVisible ? 'Cancel' : 'Add User'} */}
+        Add User
         </Button>
+
+
+
       </div>
 
-      <div className="table w-full mt-10 border-2 border-red-400">
+      {/* <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+      </Modal> */}
+
+      <div className="table w-full mt-10 ">
         <TableContainer component={Paper}>
 
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell>Name</StyledTableCell>
-                <StyledTableCell align="center">Sirname</StyledTableCell>
-                <StyledTableCell align="center">Age</StyledTableCell>
-                <StyledTableCell align="center">Email</StyledTableCell>
-                <StyledTableCell align="center">PassWord</StyledTableCell>
-                <StyledTableCell align="center">Action</StyledTableCell>
+                <StyledTableCell  width={180} align='center'><strong>NAME</strong> </StyledTableCell>
+                <StyledTableCell width={180} align="center"><strong>SIRNAME</strong></StyledTableCell>
+                <StyledTableCell width={80} align="center"><strong>AGE</strong></StyledTableCell>
+                <StyledTableCell width={250} align="center"><strong>EMAIL</strong></StyledTableCell>
+                <StyledTableCell width={100} align="center"><strong>PASSWORD</strong></StyledTableCell>
+                <StyledTableCell width={250} align="center"><strong>ACTION</strong></StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {users.map((item, index) => (
                 <StyledTableRow key={index}>
-                  <StyledTableCell component="th" scope="row">
+                  <StyledTableCell align='center' component="th" scope="row">
                     {item.name}
                   </StyledTableCell>
                   <StyledTableCell align="center">{item.sirname}</StyledTableCell>
@@ -237,13 +286,18 @@ const Main = () => {
                   <StyledTableCell align="center">{item.email}</StyledTableCell>
                   <StyledTableCell align="center">{item.password}</StyledTableCell>
                   <StyledTableCell align="center">
+                    <div className='flex justify-around'>
                     <Button variant="outlined" onClick={() => handleEdit(index)}>
                       Edit
                     </Button>
-                    <Button variant="outlined" onClick={() => handleDelete(index)}>
+                    <Button variant="outlined" onClick={ () => handleDelete(index)}>
                       Delete
                     </Button>
+
+                    </div>
+                    
                   </StyledTableCell>
+
                 </StyledTableRow>
               ))}
             </TableBody>
