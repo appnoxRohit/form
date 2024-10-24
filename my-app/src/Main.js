@@ -161,9 +161,9 @@ const Main = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [confirm , setConfirm ] = useState(false);
-  const confirmationModalOpen = () => setConfirm(true);
-  const confirmationModalClose = ()=> setConfirm(false);
+  const [confirmation , setConfirmation ] = useState(null);
+  const confirmationModalOpen = (index) => setConfirmation(index);
+  const confirmationModalClose = ()=> setConfirmation();
 
   const handleEdit = (i) => {
     setEditIndex(i);
@@ -245,21 +245,25 @@ const Main = () => {
 
       </div>
 
-      {/* <Modal
-        open={open}
-        onClose={handleClose}
+      <Modal
+        open={confirmation!=null}
+        setConfirmation={null}
+        onClose={confirmationModalClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
+            Are you sure !
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+
+          <Button type='submit' onClick={()=>{handleDelete(confirmation);confirmationModalClose()}}> yes</Button>
+          <Button onClick={()=>confirmationModalClose()}>No</Button>
+
           </Typography>
         </Box>
-      </Modal> */}
+      </Modal>
 
       <div className="table w-full mt-10 ">
         <TableContainer component={Paper}>
@@ -290,7 +294,7 @@ const Main = () => {
                     <Button variant="outlined" onClick={() => handleEdit(index)}>
                       Edit
                     </Button>
-                    <Button variant="outlined" onClick={ () => handleDelete(index)}>
+                    <Button variant="outlined" onClick={ () => confirmationModalOpen(index)}>
                       Delete
                     </Button>
 
