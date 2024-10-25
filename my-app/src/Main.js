@@ -205,6 +205,22 @@ const Main = () => {
     boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', 
     padding: '32px', 
   };
+
+  const cStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 350, 
+    height: 250, 
+    bgcolor: 'background.paper',
+    border: '2px solid #ccc', 
+    borderRadius: '12px',
+    boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', 
+    padding: '32px', 
+
+  };
+
   
   
   return (
@@ -245,21 +261,21 @@ const Main = () => {
 
       </div>
 
-      <Modal
+      <Modal className='flex'
         open={confirmation!=null}
         setConfirmation={null}
         onClose={confirmationModalClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Are you sure !
+        <Box className='' sx={cStyle}>
+          <Typography className=' pl-[75px]  ' id="modal-modal-title" variant="h6" component="h2">
+            Are you sure ?
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <Typography className=' pt-[80px]  pl-[75px]' id="modal-modal-description" sx={{ mt: 2 }}>
 
-          <Button type='submit' onClick={()=>{handleDelete(confirmation);confirmationModalClose()}}> yes</Button>
-          <Button onClick={()=>confirmationModalClose()}>No</Button>
+         <div className='flex'> <Button className='pl-2'  type='submit' onClick={()=>{handleDelete(confirmation);confirmationModalClose()}}> yes</Button>
+         <Button   onClick={()=>confirmationModalClose()}>No</Button></div>
 
           </Typography>
         </Box>
@@ -294,7 +310,7 @@ const Main = () => {
                     <Button variant="outlined" onClick={() => handleEdit(index)}>
                       Edit
                     </Button>
-                    <Button variant="outlined" onClick={ () => confirmationModalOpen(index)}>
+                    <Button variant="outlined" onClick={() => confirmationModalOpen(index)}>
                       Delete
                     </Button>
 
